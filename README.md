@@ -164,3 +164,20 @@ N:M이면, 각각 개체에 대한 테이블(총 2개)과,
 ex) costraint fk_reg_cus foreign key(reg_event) references customer(id) on delete cascade
      또는
     costraint fk_reg_cus foreign key(reg_event) references customer(id) on delete set null
+
+<hr>
+
+해당 내용들로 프로젝트 진행(ppt완성)
+<br>
+https://www.canva.com/design/DAGPMF4D-NU/67YfwQBeHmBVP7LDnCz6NA/edit?utm_content=DAGPMF4D-NU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
+
+-프로젝트 진행 중 자식 릴레이션의 이름을 모르는 문제가 발생-
+<br>
+select fk.owner,fk.constraint_name,pk.TABLE_NAME parent_table,fk.table_name child_table
+FROM all_constraints fk, all_constraints pk 
+WHERE fk.R_CONSTRAINT_NAME=pk.CONSTRAINT_NAME AND fk.CONSTRAINT_TYPE='R' and pk.TABLE_NAME='MEMBER'
+ORDER BY fk.TABLE_NAME;
+<br>
+-> 위 코드로 자식 릴레이션 이름 찾을 수 있었음
+
