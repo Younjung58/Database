@@ -12,8 +12,7 @@ from users;
 --   단 이름을 마스킹하시요.
 --   마스킹 방법은 첫글자는 그대로 나머지는 *, *는 갯 수는 이름의 길이보다 하나 적다.
 --   예) abcdef > a*****
-select name 원래이름 from users;
-select RPAD(substr(name,1,1),length(name),'*') 이름마스킹 from users;
+select name 원래이름, RPAD(substr(name,1,1),length(name),'*') 이름마스킹 from users;
 --
 --3. 모든 사람의 정보를 출력하시오.
 --    1학년은 이름뒤에 *, 2학년은 이름 뒤에 %, 3학년은 이름뒤에 #, 4학년은 이름뒤에 !를
@@ -26,3 +25,6 @@ case when grade=1 then concat(name,'*')
      end as 이름,
 grade 학년
 from users;
+
+--4. 남자만 모두 출력하시오.
+select * from users where substr(jumin,8,1)='1';
