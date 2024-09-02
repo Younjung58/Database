@@ -1,0 +1,28 @@
+--추가
+--1. 모든 사람의 이름과 주민번호를 출력하고 나이를 출력하시오.
+select name, jumin, 
+      case when substr(jumin,3,2)< to_char(sysdate,'MM') or (substr(jumin,3,2) = to_char(sysdate,'MM') and substr(jumin,5,2)<=to_char(sysdate,'DD'))
+            then 124-substr(jumin,1,2)
+           when substr(jumin,3,2)> to_char(sysdate,'MM') or (substr(jumin,3,2) = to_char(sysdate,'MM') and substr(jumin,5,2)>to_char(sysdate,'DD'))
+            then 124-substr(jumin,1,2)-1
+      end as 나이 
+from users;
+
+--2. 모든 사람의 정보를 출력하시오.
+--   단 이름을 마스킹하시요.
+--   마스킹 방법은 첫글자는 그대로 나머지는 *, *는 갯 수는 이름의 길이보다 하나 적다.
+--   예) abcdef > a*****
+select name 원래이름 from users;
+select RPAD(substr(name,1,1),length(name)-1,'*') 이름마스킹 from users;
+--
+--3. 모든 사람의 정보를 출력하시오.
+--    1학년은 이름뒤에 *, 2학년은 이름 뒤에 %, 3학년은 이름뒤에 #, 4학년은 이름뒤에 !를
+--   추가하여 출력하시오.
+select 
+case when grade=1 then concat(name,'*')
+     when grade=2 then concat(name,'%')
+     when grade=3 then concat(name,'#')
+     when grade=4 then concat(name,'!')
+     end as 이름,
+grade 학년
+from users;
