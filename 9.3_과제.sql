@@ -190,14 +190,14 @@ where time>=32;
 select
 distinct(select sum(time*12)
 from muser
-where time<32) 어린집단,
+where time<32) 어린집단_31이하,
 (select sum(time*12)
 from muser
-where time>=32) 많은집단
+where time>=32) 많은집단_32이상
 from muser;
 
 --#3) 연령별 급여의 합, over()함수 이용
-select distinct(time) 연령 , sum(salary) over(partition by time) as 총합 from muser;
+select distinct(time) 연령, sum(salary) over(partition by time) as 총합 from muser;
 
 --#4) 연령별 인원수, over()함수 이용
 select distinct(time) 연령, count(*) over(partition by time) as 연령별인원수 from muser;
