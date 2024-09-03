@@ -145,7 +145,7 @@ group by substr(reg_num,1,2);
 --20 2학년그룹과 4학년 그룹은 모두 몇명입니까
 select count(*)
 from muser
-where grade='2' or grade='4';
+where grade in ('2','4');
 
 --
 --
