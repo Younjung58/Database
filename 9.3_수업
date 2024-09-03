@@ -1,0 +1,66 @@
+select * from users;
+
+select grade, count(*) 인원수 from users group by grade;
+
+--응용1. 그룹별 인원수를 출력하되 학년을 오름차순으로 정렬
+select grade, count(*) 인원수 from users group by grade order by grade asc;
+--응용2. 그룹별 최고점과 최저점을 출력하시오.
+select grade 학년, max(point) 최고점, min(point) 최저점 from users group by grade;
+--응용3. 그룹별 최고점을 획득한 사람의 이름은?
+select name 이름, grade 학년, max(point) 최고점 from users group by grade;
+--위 작성에서는 name은 그룹화된 내용이 아니므로 에러가 발생함.
+--따라서 아래와 같이 본쿼리, 서브쿼리로 나누어서 작성해야함.
+select a.grade 학년, a.name 이름, a.point 최고점수 from users a,
+(
+select grade 학년, max(point) as 최고점 
+from users
+group by grade
+) b
+where a.point = b.최고점;
+
+
+--확인문제
+--1. 3학년과 4학년 각각 그룹의 인원수를 출력하시오.
+select grade 학년, count(*) 인원수 
+from users where grade=3 or grade=4 
+group by grade;
+--2. 1학년과 2학년의 최고점과 최저점의 점수 차이를 출력하시오.
+select grade 학년, max(point) 최고점, min(point) 최저점, max(point)-min(point) 점수차이
+from users
+where grade=1 or grade=2
+group by grade;
+--3. 주민번호 2자리는 태어난년도이다. 같은 년도에 태어난 사람을 카운팅하시오.
+--   이때 태어난년도와 인원수로 출력한다.
+select concat('19',substr(jumin,1,2)) 태어난년도, count(*) 인원수 
+from users
+group by substr(jumin,1,2);
+
+--연구과제
+--그룹을 만들 때 그룹별 조건을 지정할 수 있다.
+--예를 들어, 그룹의 인원이 3명 이상인 그룹의 인원수를 출력하시오.
+--이 지시사항은 그룹별로 인원을 카운팅하고, 그룹중에 인원수가 3명 이상인 그룹만 선택하는 의미이다.
+--그룹에 조건을 지정하는 방법을 찾아보세요.
+--
+--다음 문제를 쿼리문으로 완성하세요
+--그룹의 인원이 3명 이상인 그룹의 인원수를 출력하시오.
+select grade 그룹, count(*) 인원수 from users group by grade having count(*)>=3;
+--(group by의 조건을 넣는 방법 -> having사용)**
+
+--'서브쿼리' 작성 방법
+select grade, avg(point) from users
+group by grade having avg(point)>=     -- 본쿼리(서브쿼리의 결과값으로 본쿼리에 활용)
+(select avg(point) from users);  -- 서브쿼리(먼저 실행될 쿼리)
+--결과값이 전체평균으로 그룹의 조건을 완성==>avg(point)>=서브쿼리의 결과값(전체평균)
+
+select avg(point) from users;
+select * from users;
+
+--'인라인뷰 서브쿼리'의 예시
+--서브쿼리 결과 별칭지정(m) -> 가상 테이블의 이름(m)을 지정한 것
+--가상테이블(m)은 해당 쿼리문 안에서만 사용할 수 있음
+select m.name, m.addr
+from (select * from users) m;
+
+--가장 높은 점수를 획득한 사람의 이름과 점수는?
+select name 이름, point 점수 from users 
+where (select max(point) from users)=point;
