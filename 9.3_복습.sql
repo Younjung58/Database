@@ -90,3 +90,75 @@ where substr(reg_num,8,1) in('1','3');
 --group by
 --order by
 
+-- 번외로, group by로 풀어보기
+select avg(salary)
+from muser
+group by mod(substr(reg_num,8,1),2) having mod(substr(reg_num,8,1),2)=1;
+
+--8 전체 평균급여보다 높은 급여를 받는 사람의 이름과, 급여를 출력하시오
+select name, salary
+from muser
+where   -- 평균급여보다 높은 급여 받는 사람의 튜플을 선택
+        -- 컬럼 자체로 해결? 수식? 함수? 서브쿼리?
+    -- 평균급여의 결과값으로 조건을 완성 -> 서브쿼리
+select name, salary
+from muser
+where salary>
+    (select avg(salary)
+    from muser);
+--group by
+--order by
+
+--9 전체 평균급여보다 높은 급여를 받는 사람의 이름과, 급여, 평균급여를 출력하시오
+select name, salary,
+    (select avg(salary)
+    from muser) 평균급여    -- 수식? 함수? 서브쿼리
+from muser
+where salary>
+    (select avg(salary)
+    from muser);
+    -- 성능은 별로임.. 왜냐하면 본쿼리 select에서 튜플을
+    -- 하나씩 완성해 갈때마다 서브쿼리를 실행한다.
+    -- 동일한 서브쿼리를 계속 실행하기 때문이다.
+    
+--12 그룹별 평균급여가 전체 평균보다 높은 그룹을 출력하시오.
+-- 그룹별 평균을 구한다... 이 그룹중에 전체 평균보다 높은 그룹 선택
+select grade 그룹, avg(salary) 그룹평균
+from muser
+--where 
+group by grade having avg(salary) > (
+                                    select avg(salary)
+                                    from muser);
+--order by
+
+--14 직원들의 성별을 출력하시오. (출력 형태 이름, 성별(성별은 남또는 여로 출력한다)
+select name 이름,
+       decode(substr(reg_num,8,1),1,'남',3,'남','여') 성별
+from muser;
+--where
+--group by
+--order by
+-- 오라클에서 조건에 따라 처리하는 구조는 case when을 사용하기도 함
+-- case when then else end의 구조를 분석
+-- case
+--      when 조건1 then 조건1이 참일 경우 실행
+--      when 조건2 then 조건2가 참일 경우 실행
+--      else 조건1과 조건2가 어느것도 참이지 않을 경우
+-- end
+select name 이름,
+       case
+            when substr(reg_num,8,1) in ('1','3') then '남'
+            else '여'
+       end 성별
+from muser;     -- 연계된 문제가 18번 입니다.
+
+
+select distinct grade, salary from muser;
+-- distinct는 중복된 컬럼을 제거하고 select절에서 한번만 사용이 가능
+-- 중복제거 범위는 select에서 지정한 전체 행의 중복이다.
+-- #3번 문제에서 연령별(time 컬럼) 급여의 함. over 함수 이용
+select distinct
+       time 연령, 
+       sum(salary) over(partition by time) 총합
+from muser;
+-- 이렇게 하면, distinct는 time과 sum(salary) 두가지에 대해서 중복되어지는 값을 제거해줌
