@@ -52,6 +52,7 @@ select name 이름, min(salary) from muser where substr(reg_num,1,2)='77';
 --   그렇기에 이에 대한 해답으로, 
 --   (서브쿼리에서 리턴값으로 받은 salary에 해당하는 사람의 이름과 나이 - 본쿼리 
 --   / '77'년생에 해당하며(where), 그중에서 최소salary 리턴값을 받아 생성한 테이블(b)- 서브쿼리 로 분류하여 생각할 것)
+-- " 집계함수(단일행)(여기서 min)는 여러 데이터를 받아오는 항목(다중행)(여기서 name)과 함께 사용이 불가하다... "
 
 --해답
 select name 이름, 
@@ -217,3 +218,5 @@ select distinct(grade) 등급, max(salary)over(partition by grade) as 최고급여 fro
 --             지정한 그룹이 over 앞쪽의 함수에서만 해당 및 적용되어 결과가 리턴된다.
 --             count(*)/max(컬럼)/sum(컬럼) ... over(order by ~ asc/desc)
 --             이런식으로 쓰면 작성된 정렬이 over 앞쪽의 함수에만 해당 및 적용되어 결과가 리턴된다.
+
+commit;
