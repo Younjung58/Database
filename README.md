@@ -335,12 +335,12 @@ NO	NAME	TEL
 
 Q. 1번 학생의 이름과 과목과 점수를 출력
 **
-1) FULL JOIN : 전부다 JOIN해서 결과를 만드는 것(A테이블 ROW수*B테이블 ROW수)
+1 FULL JOIN : 전부다 JOIN해서 결과를 만드는 것(A테이블 ROW수*B테이블 ROW수)
 SELECT A.NAME, B.과목, B.점수
 FROM 학생A, 점수 B
 WHERE
 
-2) INNER JOIN : 공통된 속성만 골라서 JOIN하는 것(조건을 따진 후 참인 것만 JOIN)
+2 INNER JOIN : 공통된 속성만 골라서 JOIN하는 것(조건을 따진 후 참인 것만 JOIN)
 SELECT A.NAME, B.과목, B.점수
 FROM 학생A, 점수 B
 WHERE A.NO=B.학생NO
@@ -354,7 +354,7 @@ from sstu s     (--> left table을 from절의 자리에)
 inner join pp p    (-- right table을 join자리에)
 on s.no = p.no;
 
-3) OUTER JOIN : 이너조인 + 조인에 참여하지 않은 튜플까지 출력할 때 사용
+3 OUTER JOIN : 이너조인 + 조인에 참여하지 않은 튜플까지 출력할 때 사용
 위치에 따라서 LEFT OUTER JOIN / RIGHT OUTER JOIN으로 나뉘어짐
 조건에 따라 참이 튜플을 '테이블 1의 내용(LEFT) -> 테이블 2의 내용(RIGHT)에 JOIN' 한다면 'RIGHT OUTER JOIN'
 조건에 따라 참이 튜플을 '테이블 2의 내용(RIGHT) -> 테이블 1의 내용(LEFT)에 JOIN' 한다면 'LEFT OUTER JOIN'
