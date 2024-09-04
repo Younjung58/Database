@@ -100,6 +100,8 @@ insert into companycar values ('1234','현다','소나타',1000);
 insert into companycar values ('3344','기와','축제',2000);
 insert into companycar values ('7788','기와','레2',800);
 insert into companycar values ('9900','현다','그랭저',2100);
+select * from companycar;
+commit;
 
 --8. 배정 자동차의 차번호, 제조사, 자동차명, 가격을 출력하시오.
 select c_num 차번호, c_com 제조사, c_name 자동차명, c_price 가격
