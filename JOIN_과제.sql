@@ -170,11 +170,17 @@ from companycar a, carinfo b
 where a.c_num = b.c_num;
 
 --9. 회사에서구매는 하였지만 배정되지 않은 자동차의 차번호, 제조자, 자동차 이름을 출력
-select b.c_num, b.c_com, b.c_name
+select b.c_num 차번호, b.c_com 제조사, b.c_name 자동차이름
 from carinfo a
 right outer join companycar b
 on a.c_num=b.c_num
 where a.id is null;
+
+-- 다른표기
+select b.c_num 차번호, b.c_com 제조사, b.c_name 자동차이름
+from carinfo a, companycar b
+where a.c_num(+) = b.c_num 
+and a.id is null;
 
 --10. 자동차 가격이 1000만원 이상인 자동차의 자동차 번호를 출력하시오.
 select c_num 자동차번호
@@ -182,6 +188,10 @@ from companycar
 where c_price>=1000;
 
 --11. 배정된 자동차 중에 회사에서 구매한 자동차가 아닌 자동차 번호를 출력하시오.
+
+-- 관련 테이블은 carinfo, compnaycar임
+-- carinfo의 자동차번호에 대한 companycar항목의 null값이 필요하므로 아우터조인이며
+-- carinfo 테이블을 left로 계획.
 select a.c_num 자동차번호
 from carinfo a
 left outer join companycar b
@@ -189,6 +199,18 @@ on a.c_num=b.c_num
 where b.c_com is null;
 
 --12. 모든 사람의 정보를 출력하시오. 이름, 배정받은 자동차번호, 자동차이름
+-- 관련테이블은 users, carinfo, companycar
+-- 조인해서 만들고 싶은 테이블은 users.name, carinfo.c_num, companycar.c_name
+-- 즉 테이블 3개를 조인. 이때는 순서를 정하고 순서대로 2개씩 조인하고
+-- 그 결과의 논리테이블과 다음테이블을 조인.. 진행
+select u.name 이름, c.c_num 자동차번호, cc.c_name 자동차이름
+from users u
+left outer join carinfo c
+on u.id=c.id
+left outer join companycar cc
+on c.c_num=cc.c_num;
+
+-- 또는 순서를 다르게 진행하면,, 
 select e.name 이름, r.c_num 자동차번호, r.c_name 자동차이름
 from users e
 left outer join 
@@ -197,3 +219,44 @@ from carinfo a
 left outer join companycar b
 on a.c_num=b.c_num) r
 on e.id=r.id;
+
+-- null값이 보기 안좋음->'없음'으로 치환할 수 있는 함수: NVL(바꿀항목,'바꿀값')
+select u.name 이름, NVL(c.c_num,'없음') 자동차번호, NVL(cc.c_name,'없음') 자동차이름
+from users u
+left outer join carinfo c
+on u.id=c.id
+left outer join companycar cc
+on c.c_num=cc.c_num;
+
+
+---정리 및 고찰
+-- 테이블은 데이터 중복을 최소화 하기위해 정규화 되어야하고, 
+-- 정규화는 테이블을 분리하는 의미가 있다.
+-- 그런데, 서비스를 이용하는 고객입장에서는 2개 이상의 테이블이 조인이 되어야하는 경우가 있다.
+-- 그래서 정규화는 설계자의 입장이고, 조인은 서비스를 제공하는 입장의 기술이다.
+-- 그런데, 2개 이상의 테이블이 조인되어야 하는 서비스는
+-- 서비스가 이용될때마다 DB는 조인 연산을 계속해야한다. 쿼리도 복잡하다.
+-- 간단하게 할 방법은 없을까?
+-- 해결책은 물리적인 테이블은 유지하되, 조인 결과를 합친 논리적인 테이블을 만드는 것이다.
+-- 논리적인 테이블은 물리적인 테이블의 데이터로 만들어져있다.
+-- 이런 논리적인 테이블을 뷰라고한다.
+
+
+-- 이에따라 12번의 서비스를 제공하기 위해 view를 만들어봄
+create view all_users as(
+select u.name 이름, NVL(c.c_num,'없음') 자동차번호, NVL(cc.c_name,'없음') 자동차이름
+from users u
+left outer join carinfo c
+on u.id=c.id
+left outer join companycar cc
+on c.c_num=cc.c_num
+);
+
+select * from all_users;
+
+commit;
+-- view는 실제 존재하는 테이블이 아니라, 실제 존재하는 테이블을 통하여 만든 가상테이블이다.
+-- 이러한 view는 view이름으로 조회가 가능하다.
+-- 이론적으로는 view를 통해서 insert, delete, update가 가능하지만,
+-- 테이블의 무결성 및 제약조건에 위배가 되지 않아야한다.
+-- 이런점에서, view는 조회목적으로 많이 사용한다.
