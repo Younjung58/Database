@@ -67,7 +67,7 @@ ORDER BY fk.TABLE_NAME;
 <h4>DB_파이널 프로젝트 진행(핵심은 JOIN과 VIEW의 이용)</h4>
 (24.09.05~24.09.08)
 <div>
-[https://www.canva.com/design/DAGPMF4D-NU/67YfwQBeHmBVP7LDnCz6NA/edit?utm_content=DAGPMF4D-NU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton](https://www.canva.com/design/DAGPMPCe_Kg/aQYlfhweHsfomVlh8siYqQ/edit?utm_content=DAGPMPCe_Kg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+https://www.canva.com/design/DAGPMPCe_Kg/aQYlfhweHsfomVlh8siYqQ/edit?utm_content=DAGPMPCe_Kg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 </div>
 <hr>
 <h3>추가학습</h3>
